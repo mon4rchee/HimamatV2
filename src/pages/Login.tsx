@@ -23,6 +23,13 @@ async function hashPassword(password: string): Promise<string> {
   return hash.toString(16);
 }
 
+const withTimeout = <T,>(promise: Promise<T>, ms: number, errorMessage: string): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(errorMessage)), ms))
+  ]);
+};
+
 export default function Login() {
   const navigate = useNavigate();
   const loginUser = useMutation(api.users.loginUser);
@@ -41,7 +48,11 @@ export default function Login() {
     setLoading(true);
     try {
       const passwordHash = await hashPassword(password);
-      const result = await loginUser({ username, passwordHash });
+      const result = await withTimeout(
+        loginUser({ username, passwordHash }),
+        8000,
+        "Connection timed out. Please check your internet connection or Convex database URL."
+      );
       saveSession({
         userId: result.userId,
         token: result.token,
