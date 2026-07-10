@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npx convex dev\" \"vite --port=3000 --host=0.0.0.0\"",
-    "build": "npx convex deploy || echo 'Skipping Convex deploy (anonymous mode)' ; vite build",
+    "build": "if [ \"$VERCEL\" = \"1\" ]; then npx convex deploy && vite build; else (npx convex deploy || echo 'Skipping Convex deploy (anonymous mode)') && vite build; fi",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
