@@ -47,6 +47,12 @@ export default function Register() {
 
   const handleRegister = async () => {
     setError("");
+
+    if (!import.meta.env.VITE_CONVEX_URL || import.meta.env.VITE_CONVEX_URL === "https://quick-setter-821.convex.cloud/") {
+      setError("Please set your real VITE_CONVEX_URL in Vercel. The current one is a placeholder.");
+      return;
+    }
+
     if (!username || !region || !location || !password) {
       setError("All fields are required.");
       return;
