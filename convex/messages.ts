@@ -1,4 +1,5 @@
 import { query, mutation } from "./_generated/server";
+import { api } from "./_generated/api";
 import { v } from "convex/values";
 
 export const getMessages = query({
@@ -66,7 +67,7 @@ export const sendMessage = mutation({
     });
 
     // Schedule cleanup
-    await ctx.scheduler.runAfter(3_660_000, "messages:deleteExpiredMessages", {});
+    await ctx.scheduler.runAfter(3_660_000, api.messages.deleteExpiredMessages, {});
   },
 });
 
