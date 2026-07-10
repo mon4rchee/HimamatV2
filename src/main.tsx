@@ -7,7 +7,7 @@ import './index.css';
 
 const rawConvexUrl = import.meta.env.VITE_CONVEX_URL;
 
-if (!rawConvexUrl || rawConvexUrl === "https://quick-setter-821.convex.cloud/") {
+if (!rawConvexUrl || rawConvexUrl === "https://determined-mule-558.convex.cloud/") {
   console.error("Missing or invalid VITE_CONVEX_URL. Please set your Convex deployment URL.");
 }
 
