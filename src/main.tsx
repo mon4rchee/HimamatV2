@@ -7,10 +7,10 @@ import './index.css';
 
 const rawConvexUrl = import.meta.env.VITE_CONVEX_URL;
 
-let convexUrl = rawConvexUrl || "https://determined-mule-558.convex.cloud/";
-if (rawConvexUrl && (rawConvexUrl.includes('127.0.0.1') || rawConvexUrl.includes('localhost'))) {
+let convexUrl = (rawConvexUrl || "https://determined-mule-558.convex.cloud/").replace(/["']/g, "").trim();
+if (convexUrl.includes('127.0.0.1') || convexUrl.includes('localhost')) {
   // Route through Vite proxy to avoid port 3210 which is blocked
-  const url = new URL(rawConvexUrl);
+  const url = new URL(convexUrl);
   convexUrl = `${window.location.origin}/api/convex${url.pathname}`;
 }
 

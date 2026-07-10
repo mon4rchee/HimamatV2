@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { saveSession } from "../lib/session";
 import { PH_LOCATIONS } from "../lib/philippineLocations";
 
@@ -23,13 +23,6 @@ async function hashPassword(password: string): Promise<string> {
   }
   return hash.toString(16);
 }
-
-const withTimeout = <T,>(promise: Promise<T>, ms: number, errorMessage: string): Promise<T> => {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(errorMessage)), ms))
-  ]);
-};
 
 export default function Register() {
   const navigate = useNavigate();
@@ -59,11 +52,7 @@ export default function Register() {
     setLoading(true);
     try {
       const passwordHash = await hashPassword(password);
-      const result = await withTimeout(
-        registerUser({ username, location, region, passwordHash }),
-        8000,
-        "Connection timed out. Please check your internet connection or Convex database URL."
-      );
+      const result = await registerUser({ username, location, region, passwordHash });
       saveSession({
         userId: result.userId,
         token: result.token,
@@ -166,7 +155,7 @@ export default function Register() {
 
           <p className="text-center text-xs" style={{ color: "var(--text-muted)" }}>
             Already have an account?{" "}
-            <a href="/login" style={{ color: "var(--accent)" }}>Sign in</a>
+            <Link to="/login" style={{ color: "var(--accent)" }}>Sign in</Link>
           </p>
         </div>
 
